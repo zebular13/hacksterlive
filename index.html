@@ -2,12 +2,51 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Hacksterlive by zebular13</title>
+    <title>Hacksterlive</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    <script type="text/javascript" src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $.getJSON("https://api.meetup.com/2/groups?callback=?&sign=true&member_id=194674229&page=50&api&key=6f36f4e3c366206c4549b6f6b714d&photo-host=public&only=members,name,link,country,organizer.name,next_event",
+            function(data) {
+                var htmlString = "";
+                var total = 0;
+                var UScountry = 0;
+                var USmeetups = 0;
+                var meetups = data.results.length;
+                var worldmeetups = 0;
+                var INmeetups = 0;
+
+                $.each(data.results, function(i, item) {
+                    var results = data.results.length;
+                    total += item.members;
+
+                    country = item.country;
+                    UScountry += country;
+                    USmeetups = (UScountry.match(/US/g).length);
+                    worldmeetups = (meetups - USmeetups);
+                    htmlString += '<h3><a href="' + item.link + '" target="_blank">' + item.members + ': ' + item.country + '</a></h3>';
+                });
+
+
+                console.log(total);
+                console.log(USmeetups);
+                console.log(meetups - USmeetups);
+
+
+                //$('#groups').html(htmlString);
+                $('#total').text('Total Meetup Members: ' + total);
+                $('#meetups').text('Number of Meetups: ' + meetups);
+                $('#USmeetups').text('Number of US Meetups: ' + USmeetups);
+                $('#worldMeetups').text('Number of World Meetups: ' + worldmeetups);
+                //$('#INmeetups').text('Number of Indian Meetups: '+INmeetups);    
+            });
+    });
+</script>
   </head>
   <body>
     <section class="page-header">
@@ -23,6 +62,14 @@
 <a id="welcome-to-hackster-lives-home-on-github" class="anchor" href="#welcome-to-hackster-lives-home-on-github" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Hackster Live's home on Github.</h3>
 
 <p>In 2016 we set Hackster on a new mission: reach 50,000 makers and developers around the world through a physical network of Meetups and Workshops, focused on IoT education in the 21st century. Led by a network of passionate ambassadors, we're giving our community and partners a voice in envisioning what's next in hardware, the cloud, and connectivity, and the magic that happens when they all come together.</p>
+<h3>Hackster Live Stats</h3>
+<div id="groups"></div>
+<div id="events"></div>
+<div id="total"></div>
+<div id="meetups"></div>    
+<div id="USmeetups"></div>
+<div id="worldMeetups"></div>
+<div id="INmeetups"></div>
 <h3>Hackster Live Agenda</h3>
 <iframe src="https://calendar.google.com/calendar/embed?showNav=0&amp;showPrint=0&amp;showTabs=0&amp;showTz=0&amp;mode=AGENDA&amp;height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=live%40hackster.io&amp;color=%23333333&amp;ctz=America%2FLos_Angeles" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no"></iframe>
 
